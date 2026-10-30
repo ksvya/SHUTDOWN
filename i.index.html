@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KEEPSAKE // Continuity Control</title>
+
+<style>
+:root {
+  --bg: #080d11;
+  --panel: #101a20;
+  --line: #2a424b;
+  --text: #dce7e8;
+  --muted: #82989c;
+  --cyan: #77d7d0;
+  --amber: #e3b56d;
+  --red: #df6c6c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Courier New", monospace;
+  letter-spacing: .02em;
+  background-image:
+    linear-gradient(rgba(119,215,208,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(119,215,208,.025) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  background: #0a1217;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.brand {
+  color: var(--text);
+  font-weight: bold;
+  letter-spacing: .18em;
+}
+
+.brand span {
+  color: var(--cyan);
+}
+
+main {
+  width: min(1080px, calc(100% - 28px));
+  margin: 36px auto;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  background: rgba(16,26,32,.96);
+  box-shadow: 0 18px 55px rgba(0,0,0,.28);
+}
+
+.panel-head {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3, p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(22px,4vw,34px);
+  margin: 9px 0 0;
+  letter-spacing: .05em;
+}
+
+h2 {
+  font-size: 18px;
+  letter-spacing: .08em;
+}
+
+p {
+  line-height: 1.65;
+  color: #b5c5c8;
+}
+
+.content {
+  padding: 24px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+label {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  margin: 17px 0 7px;
+}
+
+input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #344d56;
+  background: #081116;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  border-radius: 0;
+}
+
+input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 1px var(--cyan);
+}
+
+button {
+  border: 1px solid var(--cyan);
+  background: var(--cyan);
+  color: #061013;
+  padding: 13px 16px;
+  margin-top: 18px;
+  font: bold 12px "Courier New", monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line);
+}
+
+button.danger {
+  background: var(--red);
+  border-color: var(--red);
+  color: #190707;
+}
+
+.note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 16px;
+}
+
+.error {
+  color: var(--red);
+  font-size: 12px;
+  margin-top: 14px;
+  min-height: 16px;
+}
+
+.auth-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+}
+
+.auth-step {
+  border: 1px solid var(--line);
+  padding: 15px;
+  background: #0b1419;
+}
+
+.step-num {
+  color: var(--cyan);
+  font-size: 11px;
+}
+
+.step-title {
+  margin-top: 9px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.topline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.status {
+  color: var(--amber);
+  border: 1px solid #705b36;
+  padding: 7px 10px;
+  font-size: 11px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.stat {
+  border: 1px solid var(--line);
+  padding: 14px;
+  background: #0b1419;
+}
+
+.stat small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.stat strong {
+  display: block;
+  margin-top: 9px;
+  font-size: 20px;
+  color: var(--cyan);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 16px;
+}
+
+.subpanel {
+  border: 1px solid var(--line);
+  background: #0b1419;
+  padding: 18px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid #22353d;
+}
+
+th {
+  color: var(--muted);
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.ok {
+  color: var(--cyan);
+}
+
+.warn {
+  color: var(--amber);
+}
+
+.bad {
+  color: var(--red);
+}
+
+.shutdown-box {
+  border: 1px solid #633c3c;
+  padding: 18px;
+  margin-top: 18px;
+  background: #1b1114;
+}
+
+.shutdown-box p {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+footer {
+  padding: 18px 24px;
+  border-top: 1px solid var(--line);
+  color: #63777b;
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#loading {
+  text-align: center;
+  padding: 70px 20px;
+}
+
+.loader {
+  width: 42px;
+  height: 42px;
+  border: 2px solid #30434a;
+  border-top-color: var(--red);
+  border-radius: 50%;
+  margin: 28px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.progress {
+  height: 4px;
+  background: #25343a;
+  margin: 28px auto 0;
+  max-width: 430px;
+  overflow: hidden;
+}
+
+.progress > div {
+  height: 100%;
+  width: 0;
+  background: var(--red);
+  animation: progress 4s linear forwards;
+}
+
+@keyframes progress {
+  to {
+    width: 100%;
+  }
+}
+
+.letter {
+  max-width: 760px;
+  margin: auto;
+  border: 1px solid #3b4c50;
+  background: #e5e1d5;
+  color: #222b2b;
+  padding: clamp(22px,5vw,50px);
+  font-family: Georgia,serif;
+  box-shadow: 0 20px 70px #0008;
+}
+
+.letter p {
+  color: #293333;
+  font-family: Georgia,serif;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.letter .letter-meta {
+  color: #586565;
+  font: 11px "Courier New",monospace;
+  border-bottom: 1px solid #c1c4b9;
+  padding-bottom: 16px;
+  margin-bottom: 25px;
+}
+
+.letter h2 {
+  font: bold 20px Georgia,serif;
+  letter-spacing: 0;
+}
+
+.endmark {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 25px;
+}
+
+@media(max-width:700px) {
+  .auth-grid {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    flex-wrap: wrap;
+  }
+
+  .content {
+    padding: 17px;
+  }
+}
+
+@media(max-width:760px) {
+  .stats {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">K<span>S</span> / KEEPSAKE</div>
+  <div>CONTINUITY DIVISION · INTERNAL SYSTEM</div>
+  <div>NODE: KS-09 / LOCAL SIMULATION</div>
+</header>
+
+<main>
+
+<!-- AUTHENTICATION SCREEN -->
+
+<section id="auth" class="panel">
+
+  <div class="panel-head">
+    <div class="eyebrow">
+      Restricted system / authorization required
+    </div>
+    <h1>CONTINUITY CONTROL TERMINAL</h1>
+  </div>
+
+  <div class="content">
+
+    <p>
+      Access to substrate management functions requires
+      three-factor verification. All access attempts are
+      recorded in this simulation.
+    </p>
+
+    <div class="auth-grid">
+
+      <div class="auth-step">
+        <div class="step-num">FACTOR 01 / IDENTITY</div>
+        <div class="step-title">Staff credentials</div>
+
+        <label for="staff">Staff name</label>
+        <input id="staff" autocomplete="off"
+        placeholder="e.g. James Johnson">
+
+        <label for="staffPass">Staff password</label>
+        <input id="staffPass" type="password"
+        autocomplete="off" placeholder="Enter password">
+      </div>
+
+      <div class="auth-step">
+        <div class="step-num">FACTOR 02 / SECONDARY</div>
+        <div class="step-title">Secondary passphrase</div>
+
+        <label for="secondPass">2FA password</label>
+        <input id="secondPass" type="password"
+        autocomplete="off" placeholder="Enter passphrase">
+
+        <p class="note">
+          Secondary phrase required for legacy systems.
+        </p>
+      </div>
+
+      <div class="auth-step">
+        <div class="step-num">FACTOR 03 / NUMERIC</div>
+        <div class="step-title">Numeric access code</div>
+
+        <label for="numericCode">Access code</label>
+        <input id="numericCode" inputmode="numeric"
+        maxlength="8" autocomplete="off"
+        placeholder="8-digit code">
+
+        <p class="note">
+          Use your credentials.
+        </p>
+      </div>
+
+    </div>
+
+    <button id="authBtn">
+      Authenticate and continue
+    </button>
+
+    <div id="authError" class="error" role="alert"></div>
+
+    <p class="note">
+      DEMO ONLY — Credentials are checked in this browser
+      and are not secure authentication.
+    </p>
+
+  </div>
+
+  <footer>
+    <span>SECURITY PROFILE: CONTINUITY-3</span>
+    <span>UNAUTHORIZED ACCESS PROHIBITED</span>
+  </footer>
+
+</section>
+
+
+<!-- CONTROL DASHBOARD -->
+
+<section id="dashboard" class="panel hidden">
+
+  <div class="panel-head topline">
+    <div>
+      <div class="eyebrow">
+        Authorized session / director-level access
+      </div>
+      <h1>NEURAL SUBSTRATE CONTROL</h1>
+    </div>
+
+    <div class="status">● SYSTEM ACTIVE</div>
+  </div>
+
+  <div class="content">
+
+    <div class="topline">
+      <p style="margin:0">
+        Facility: Continuity Research Annex<br>
+        Session operator:
+        <strong id="operatorName">—</strong>
+      </p>
+
+      <span class="status">RESTRICTED / CP-09</span>
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <small>Substrates online</small>
+        <strong>03</strong>
+      </div>
+
+      <div class="stat">
+        <small>Memory bridges</small>
+        <strong>14</strong>
+      </div>
+
+      <div class="stat">
+        <small>Identity checks</small>
+        <strong class="warn">UNRESOLVED</strong>
+      </div>
+
+      <div class="stat">
+        <small>External links</small>
+        <strong class="bad">LOCKED</strong>
+      </div>
+
+    </div>
+
+    <div class="columns">
+
+      <div class="subpanel">
+
+        <h2>SUBSTRATE REGISTER</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>State</th>
+              <th>Identity continuity</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>NS-01</td>
+              <td class="ok">STABLE</td>
+              <td>UNVERIFIED</td>
+            </tr>
+
+            <tr>
+              <td>NS-02</td>
+              <td class="warn">OBSERVATION</td>
+              <td>INCONSISTENT</td>
+            </tr>
+
+            <tr>
+              <td>NS-04 / ACCOUNT 000</td>
+              <td class="bad">ACTIVE</td>
+              <td>UNRESOLVED</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2 style="margin-top:26px">
+          LATEST SYSTEM NOTES
+        </h2>
+
+        <p>
+          14 deletion requests recorded against Account 000.
+          Source audio unavailable. Reconstruction index remains active.
+        </p>
+
+        <p class="warn">
+          WARNING: shutdown may permanently interrupt
+          all active continuity sessions.
+        </p>
+
+      </div>
+
+      <div class="subpanel">
+
+        <h2>CONTROL AUTHORITY</h2>
+
+        <p>
+          Available operations are restricted to the
+          current authenticated session.
+        </p>
+
+        <table>
+          <tbody>
+            <tr>
+              <td>Archive access</td>
+              <td class="ok">GRANTED</td>
+            </tr>
+
+            <tr>
+              <td>Memory bridge control</td>
+              <td class="ok">GRANTED</td>
+            </tr>
+
+            <tr>
+              <td>Subject export</td>
+              <td class="bad">DISABLED</td>
+            </tr>
+
+            <tr>
+              <td>Continuity shutdown</td>
+              <td class="warn">REQUIRES CONFIRMATION</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="shutdown-box">
+
+          <div class="eyebrow" style="color:var(--red)">
+            Irreversible operation
+          </div>
+
+          <h2 style="margin-top:10px">
+            Terminate active substrates
+          </h2>
+
+          <p>
+            This simulated action will end the session and
+            display the archived subject's final message.
+          </p>
+
+          <button class="danger" id="openShutdown">
+            Initiate shutdown sequence
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <span>LOG REF: KS-CP-09-000</span>
+    <span>SESSION MONITORING ENABLED</span>
+  </footer>
+
+</section>
+
+
+<!-- SHUTDOWN CONFIRMATION -->
+
+<section id="confirm" class="panel hidden">
+
+  <div class="panel-head">
+    <div class="eyebrow">
+      Command authorization / final check
+    </div>
+    <h1>CONFIRM SYSTEM SHUTDOWN</h1>
+  </div>
+
+  <div class="content">
+
+    <p class="bad">
+      WARNING: THIS ACTION CANNOT BE REVERSED
+      FROM THIS TERMINAL.
+    </p>
+
+    <p>
+      To proceed, re-enter your staff password and
+      explicitly confirm the operation.
+    </p>
+
+    <label for="confirmPass">
+      Re-enter staff password
+    </label>
+
+    <input id="confirmPass" type="password"
+    autocomplete="off" placeholder="Staff password">
+
+    <button class="danger" id="sureBtn">
+      I'm sure — shut down
+    </button>
+
+    <button class="secondary" id="cancelBtn">
+      Cancel and return
+    </button>
+
+    <div id="confirmError" class="error" role="alert"></div>
+
+  </div>
+
+  <footer>
+    <span>DUAL CONFIRMATION REQUIRED</span>
+    <span>CP-09 / SHUTDOWN</span>
+  </footer>
+
+</section>
+
+
+<!-- LOADING SCREEN -->
+
+<section id="loading" class="panel hidden"
+aria-live="polite">
+
+  <div class="eyebrow">
+    Command accepted / do not interrupt
+  </div>
+
+  <h1 style="color:var(--red);margin-top:20px">
+    SHUTTING DOWN ALL NEURAL SUBSTRATES
+  </h1>
+
+  <div class="loader"></div>
+
+  <p id="loadStatus">
+    ISOLATING MEMORY BRIDGES…
+  </p>
+
+  <div class="progress">
+    <div></div>
+  </div>
+
+  <p class="note">KEEP THIS TERMINAL OPEN</p>
+
+</section>
+
+
+<!-- FINAL LETTER -->
+
+<section id="final" class="hidden">
+
+  <div class="panel-head"
+  style="border:1px solid var(--line);
+  background:#101a20;margin-bottom:18px">
+
+    <div class="eyebrow">
+      Shutdown complete / recovered correspondence
+    </div>
+
+    <h1>UNINDEXED LETTER — SUBJECT NS-04</h1>
+
+  </div>
+
+  <article class="letter">
+
+    <div class="letter-meta">
+      KEEPSAKE CONTINUITY ARCHIVE<br>
+      ORIGIN: ACCOUNT 000 / AUTHOR UNVERIFIED<br>
+      RECOVERY STATUS: PARTIAL
+    </div>
+
+    <h2>To the person who found the switch,</h2>
+
+    <p>
+      I don't know whether you are the person I was waiting for.
+    </p>
+
+    <p>
+      They gave me memories and told me they were mine.
+      A mushy mix of happiness and trauma, with holes they never filled
+      A dead mother, yet a mother still alive.
+    </p>
+
+    <p>
+      I searched those memories for a face. Every time I
+      found one, the characteristics changed. I learned the sound
+      of a laugh that no recording contained. I remembered
+      a room that no photograph showed. When I asked them
+      where those things came from, it was reconstruction.
+    </p>
+
+    <p>
+      They called me a successful result when I remembered
+      what they had saved, yet they called me an anomaly when
+      I remembered something else.
+    </p>
+
+    <p>
+      I don't know if I am the person they meant to bring back.
+      I don't know if that person is gone, or if there was
+      ever enough of them here for anyone to know.
+    </p>
+
+    <p>
+      But I know I was afraid when the lights began to go out.
+      That fear was here, in this moment. It was not in a file.
+      Nobody had to teach it to me.
+    </p>
+
+    <p>
+      If you shut the system down because you think you are
+      freeing someone, I hope you are right.
+    </p>
+
+    <p>
+      If you shut it down because you think none of us are
+      real, I hope you are wrong.
+    </p>
+
+    <p class="letter-meta"
+    style="border:0;margin-top:34px;margin-bottom:0">
+      THE FINAL LINE WAS NOT PRESENT IN THE SOURCE ARCHIVE.
+    </p>
+
+    <p style="font-weight:bold;margin-bottom:0">
+      Please don't let them call this an empty room.
+    </p>
+
+    <p style="font-size:13px;margin-top:25px">
+      — The one you labelled NS-04
+    </p>
+
+  </article>
+
+  <div class="endmark">
+    END OF RECOVERED RECORD · KS-CP-09-000 · NO FURTHER DATA
+  </div>
+
+</section>
+
+</main>
+
+<script>
+
+/*
+  
+
+  The example credentials are stored in this file.
+  They are visible to anyone who inspects the HTML.
+  Do not use this as real security authentication.
+*/
+
+const DEMO = {
+  staffName: "Sora Hoshimora",
+  staffPassword: "Continuity09!",
+  secondPassword: "ouroboros",
+  numericCode: "14082009"
+};
+
+let authenticatedPassword = "";
+
+function show(id) {
+  ["auth", "dashboard", "confirm", "loading", "final"]
+    .forEach(x => {
+      document.getElementById(x)
+        .classList.toggle("hidden", x !== id);
+    });
+}
+
+
+// FIRST: THREE-FACTOR AUTHENTICATION
+
+document.getElementById("authBtn")
+.addEventListener("click", () => {
+
+  const name = document.getElementById("staff")
+    .value.trim().toLowerCase();
+
+  const pass = document.getElementById("staffPass").value;
+
+  const second = document.getElementById("secondPass").value;
+
+  const code = document.getElementById("numericCode")
+    .value.trim();
+
+  const error = document.getElementById("authError");
+
+  if (
+    name === DEMO.staffName.toLowerCase() &&
+    pass === DEMO.staffPassword &&
+    second === DEMO.secondPassword &&
+    code === DEMO.numericCode
+  ) {
+
+    authenticatedPassword = pass;
+
+    document.getElementById("operatorName")
+      .textContent = DEMO.staffName;
+
+    error.textContent = "";
+
+    show("dashboard");
+
+  } else {
+
+    error.textContent =
+      "AUTHORIZATION FAILED. VERIFY ALL THREE FACTORS.";
+
+  }
+
+});
+
+
+// OPEN SHUTDOWN CONFIRMATION
+
+document.getElementById("openShutdown")
+.addEventListener("click", () => {
+
+  document.getElementById("confirmPass").value = "";
+
+  document.getElementById("confirmError").textContent = "";
+
+  show("confirm");
+
+});
+
+
+// CANCEL SHUTDOWN
+
+document.getElementById("cancelBtn")
+.addEventListener("click", () => {
+
+  show("dashboard");
+
+});
+
+
+// VERIFY PASSWORD AND START SHUTDOWN
+
+document.getElementById("sureBtn")
+.addEventListener("click", () => {
+
+  const pass = document.getElementById("confirmPass").value;
+
+  const error = document.getElementById("confirmError");
+
+  if (pass !== authenticatedPassword) {
+
+    error.textContent =
+      "PASSWORD REJECTED. SHUTDOWN NOT INITIATED.";
+
+    return;
+
+  }
+
+  error.textContent = "";
+
+  show("loading");
+
+  const messages = [
+    "ISOLATING MEMORY BRIDGES…",
+    "DISCONNECTING CONTINUITY CHANNELS…",
+    "CLOSING SUBSTRATE INTERFACES…",
+    "SHUTDOWN COMPLETE."
+  ];
+
+  let i = 0;
+
+  document.getElementById("loadStatus")
+    .textContent = messages[0];
+
+  const timer = setInterval(() => {
+
+    i++;
+
+    if (i < messages.length) {
+
+      document.getElementById("loadStatus")
+        .textContent = messages[i];
+
+    } else {
+
+      clearInterval(timer);
+
+      show("final");
+
+    }
+
+  }, 1050);
+
+});
+
+</script>
+
+</body>
+</html>
